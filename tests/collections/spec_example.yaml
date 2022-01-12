@@ -1,0 +1,104 @@
+---
+File: DEP-11
+Version: '0.8'
+Origin: chromodoris-main
+MediaBaseUrl: https://metadata.tanglu.org/appstream/media/
+---
+Type: desktop-application
+ID: gconf-editor.desktop
+Icon:
+  cached: gconf-editor_gconf-editor.png
+Name:
+  C: Configuration Editor
+  be@latin: Redaktar naładaŭ
+  bg: Настройки на програмите
+  pl: Edytor konfiguracji
+Package: gconf-editor
+Summary:
+  C: Directly edit your entire configuration database
+  ar: حرّر مباشرة كامل قاعدة بيانات الإعدادات.
+  de: Direkten Zugriff auf Ihre gesamte Konfigurationsdatenbank erlangen
+Categories:
+  - GNOME
+  - GTK
+  - System
+---
+Type: desktop-application
+ID: kmplayer.desktop
+Icon:
+  cached: kmplayer_kmplayer.png
+Name:
+  C: KMPlayer
+  hi: केएम-प्लेयर
+  hne: केएम-प्लेयर
+  ku: KMLêdar
+  pa: KM-ਪਲੇਅਰ
+  sr: КМ‑плејер
+  sr@ijekavian: КМ‑плејер
+  sv: Kmplayer
+Package: kmplayer
+Summary:
+  C: KDE interface for MPlayer
+Categories:
+  - Qt
+  - KDE
+  - AudioVideo
+  - Player
+Provides:
+  mediatypes:
+    - application/ogg
+    - application/smil
+    - application/vnd.ms-asf
+    - application/vnd.rn-realmedia
+    - application/x-kmplayer
+    - video/webm
+    - video/x-avi
+---
+ID: texstudio.desktop
+Type: desktop-application
+Package: texstudio
+Name:
+  C: TeXstudio
+Summary:
+  C: LaTeX development environment
+  fr: Environnement de développement LaTeX
+Description:
+  C: <p>TeXstudio is an integrated writing environment for creating LaTeX documents. It integrates editing,
+    building and viewing into a single frontend.</p><p>Our goal is to make writing LaTeX as easy and comfortable
+    as possible. This is achieved through a rich feature set including:</p>
+Icon:
+  cached: texstudio_texstudio.png
+Keywords:
+  C:
+    - editor
+    - latex
+    - pdflatex
+    - xelatex
+    - lualatex
+    - context
+    - bibtex
+ProjectLicense: GPL-2.0
+Url:
+  homepage: https://texstudio.sourceforge.net/
+Categories:
+  - Office
+  - Publishing
+Provides:
+  mediatypes:
+    - text/x-tex
+Screenshots:
+  - default: true
+    source-image:
+      height: 756
+      url: texstudio_2.8.4+debian-3_amd64/screenshots/source/screenshot-1.png
+      width: 1344
+    thumbnails:
+      - height: 423
+        url: texstudio_2.8.4+debian-3_amd64/screenshots/752x423/screenshot-1.png
+        width: 752
+      - height: 351
+        url: texstudio_2.8.4+debian-3_amd64/screenshots/624x351/screenshot-1.png
+        width: 624
+      - height: 63
+        url: texstudio_2.8.4+debian-3_amd64/screenshots/112x63/screenshot-1.png
+        width: 112

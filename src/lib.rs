@@ -107,6 +107,7 @@ mod release;
 mod screenshot;
 mod translatable_string;
 mod xml;
+mod yaml;
 
 pub use app_id::AppId;
 pub use collection::Collection;
@@ -120,3 +121,4 @@ pub use screenshot::{Image, Screenshot, Video};
 pub use translatable_string::{MarkupTranslatableString, TranslatableList, TranslatableString};
 pub use url;
 pub use xmltree;
+pub use yaml_rust;

@@ -6,9 +6,11 @@ use flate2::read::GzDecoder;
 use serde::{Deserialize, Serialize};
 use std::convert::TryFrom;
 use std::fs::File;
+use std::fs;
 use std::io::BufReader;
 use std::path::PathBuf;
 use xmltree::Element;
+use yaml_rust::YamlLoader;
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 /// A collection is a wrapper around multiple components at once.
@@ -40,6 +42,19 @@ impl Collection {
     pub fn from_path(path: PathBuf) -> Result<Self, ParseError> {
         let file = BufReader::new(File::open(path)?);
         let collection = Collection::try_from(&Element::parse(file)?)?;
+        Ok(collection)
+    }
+
+    /// Create a new `Collection` from an YAML file.
+    ///
+    /// # Arguments
+    ///
+    /// * `path` - The path to the collection.
+    pub fn from_yaml_path(path: PathBuf) -> Result<Self, ParseError> {
+        let s = fs::read_to_string(path)?;
+        let rrr = YamlLoader::load_from_str(s.as_str()).unwrap();
+        let l = rrr.len();
+        let collection = Collection::try_from(&rrr)?;
         Ok(collection)
     }
 
@@ -209,6 +224,18 @@ mod tests {
             .provide(Provide::Font("LinLibertine_M.otf".into()))
             .build()
         )
+        .build();
+
+        assert_eq!(c1, c2);
+
+        Ok(())
+    }
+
+    #[test]
+    fn spec_example_collection_yaml() -> Result<(), Box<dyn Error>> {
+        let c1 = Collection::from_yaml_path("./tests/collections/spec_example.yaml".into())?;
+
+        let c2 = CollectionBuilder::new("0.8")
         .build();
 
         assert_eq!(c1, c2);
