@@ -122,8 +122,8 @@ impl CollectionBuilder {
     }
 
     /// Sets the origin of the collection.
-    pub fn media_base_url(mut self, origin: &str) -> Self {
-        self.media_base_url = Some(origin.to_string());
+    pub fn media_base_url(mut self, media_base_url: &str) -> Self {
+        self.media_base_url = Some(media_base_url.to_string());
         self
     }
 

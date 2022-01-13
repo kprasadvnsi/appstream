@@ -5,8 +5,8 @@ use super::Component;
 use flate2::read::GzDecoder;
 use serde::{Deserialize, Serialize};
 use std::convert::TryFrom;
-use std::fs::File;
 use std::fs;
+use std::fs::File;
 use std::io::BufReader;
 use std::path::PathBuf;
 use xmltree::Element;
@@ -25,7 +25,7 @@ pub struct Collection {
     pub origin: Option<String>,
 
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    /// The base URL for media (screenshots, icons, ...) referenced in the metadata 
+    /// The base URL for media (screenshots, icons, ...) referenced in the metadata
     /// file, could be something like `https://appstream.debian.org/media/bookworm`.
     pub media_base_url: Option<String>,
 
@@ -242,6 +242,7 @@ mod tests {
 
         let c2 = CollectionBuilder::new("0.8")
         .origin("chromodoris-main")
+        .media_base_url("https://metadata.tanglu.org/appstream/media/")
         .component(
             ComponentBuilder::default()
             .id("gconf-editor.desktop".into())
@@ -283,6 +284,103 @@ mod tests {
             .and_locale("hr", vec!["Slika", "Preglednik"])
             .and_locale("sv", vec!["Bild", "Visare"]))
             .compulsory_for_desktop("GNOME".into())
+            .icon(Icon::Cached {
+                path: "qutebrowser_qutebrowser.png".into(),
+                width: Some(48),
+                height: Some(48)
+            })
+            .icon(Icon::Cached {
+                path: "qutebrowser_qutebrowser.png".into(),
+                width: Some(64),
+                height: Some(64)
+            })
+            .icon(Icon::Stock("qutebrowser".into()))
+            .icon(Icon::Remote{
+                width: Some(128),
+                height: Some(128),
+                url: Url::parse("https://metadata.tanglu.org/appstream/media/org/qutebrowser/qutebrowser/6741f0783aa49238b898392c9cbdab11/icons/128x128/qutebrowser_qutebrowser.png")?
+            })
+            .icon(Icon::Local {
+                path: "qutebrowser_qutebrowser.png".into(),
+                width: Some(48),
+                height: Some(48)
+            })
+            .screenshot(
+                ScreenshotBuilder::default()
+                .caption(
+                    TranslatableString::with_default("Timer window")
+                    .and_locale("id", "Jendela pengatur waktu")
+                    .and_locale("sv", "Tidtagarfönster")
+                )
+                .image(
+                    ImageBuilder::new(Url::parse("https://metadata.tanglu.org/appstream/media/org/gnome/Pomodoro/fe7095e76937928da880475ee610db6d/screenshots/image-1_752x613.png")?)
+                        .kind(ImageKind::Thumbnail)
+                        .width(752)
+                        .height(613)
+                        .build(),
+                )
+                .image(
+                    ImageBuilder::new(Url::parse("https://metadata.tanglu.org/appstream/media/org/gnome/Pomodoro/fe7095e76937928da880475ee610db6d/screenshots/image-1_624x509.png")?)
+                        .kind(ImageKind::Thumbnail)
+                        .width(624)
+                        .height(509)
+                        .build(),
+                )
+                .image(
+                    ImageBuilder::new(Url::parse("https://metadata.tanglu.org/appstream/media/org/gnome/Pomodoro/fe7095e76937928da880475ee610db6d/screenshots/image-1_224x182.png")?)
+                        .kind(ImageKind::Thumbnail)
+                        .width(224)
+                        .height(182)
+                        .build(),
+                )
+                .image(
+                    ImageBuilder::new(Url::parse("https://metadata.tanglu.org/appstream/media/org/gnome/Pomodoro/fe7095e76937928da880475ee610db6d/screenshots/image-1_orig.png")?)
+                        .kind(ImageKind::Source)
+                        .width(800)
+                        .height(653)
+                        .build(),
+                )
+                .build()
+            )
+            .screenshot(
+                ScreenshotBuilder::default()
+                .set_default(false)
+                .caption(
+                    TranslatableString::with_default("Preferences")
+                    .and_locale("id", "Preferensi")
+                    .and_locale("el", "Επιλογές")
+                )
+                .image(
+                    ImageBuilder::new(Url::parse("https://metadata.tanglu.org/appstream/media/org/gnome/Pomodoro/fe7095e76937928da880475ee610db6d/screenshots/image-2_752x423.png")?)
+                        .kind(ImageKind::Thumbnail)
+                        .width(752)
+                        .height(423)
+                        .build(),
+                )
+                .image(
+                    ImageBuilder::new(Url::parse("https://metadata.tanglu.org/appstream/media/org/gnome/Pomodoro/fe7095e76937928da880475ee610db6d/screenshots/image-2_624x351.png")?)
+                        .kind(ImageKind::Thumbnail)
+                        .width(624)
+                        .height(351)
+                        .build(),
+                )
+                .image(
+                    ImageBuilder::new(Url::parse("https://metadata.tanglu.org/appstream/media/org/gnome/Pomodoro/fe7095e76937928da880475ee610db6d/screenshots/image-2_224x126.png")?)
+                        .kind(ImageKind::Thumbnail)
+                        .width(224)
+                        .height(126)
+                        .build(),
+                )
+                .image(
+                    ImageBuilder::new(Url::parse("https://metadata.tanglu.org/appstream/media/org/gnome/Pomodoro/fe7095e76937928da880475ee610db6d/screenshots/image-2_orig.png")?)
+                        .kind(ImageKind::Source)
+                        .width(1024)
+                        .height(576)
+                        .build(),
+                )
+                .build()
+            )
+
             .build()
         )
         .build();
