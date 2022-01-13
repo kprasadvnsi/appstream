@@ -24,6 +24,11 @@ pub struct Collection {
     /// The origin of the collection, could be something like `flathub`.
     pub origin: Option<String>,
 
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    /// The base URL for media (screenshots, icons, ...) referenced in the metadata 
+    /// file, could be something like `https://appstream.debian.org/media/bookworm`.
+    pub media_base_url: Option<String>,
+
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// The components that are part of this collection.
     pub components: Vec<Component>,
@@ -236,6 +241,50 @@ mod tests {
         let c1 = Collection::from_yaml_path("./tests/collections/spec_example.yaml".into())?;
 
         let c2 = CollectionBuilder::new("0.8")
+        .origin("chromodoris-main")
+        .component(
+            ComponentBuilder::default()
+            .id("gconf-editor.desktop".into())
+            .name(
+                TranslatableString::with_default("Configuration Editor")
+                .and_locale("be@latin", "Redaktar naładaŭ")
+                .and_locale("bg", "Настройки на програмите")
+                .and_locale("pl", "Edytor konfiguracji")
+            )
+            .pkgname("gconf-editor")
+            .extend("libreoffice-base.desktop".into())
+            .extend("libreoffice-calc.desktop".into())
+            .extend("libreoffice-draw.desktop".into())
+            .source_pkgname("gconf-editor-src")
+            .kind(ComponentKind::DesktopApplication)
+            .summary(TranslatableString::with_default("Directly edit your entire configuration database")
+            .and_locale("ar", "حرّر مباشرة كامل قاعدة بيانات الإعدادات.")
+            .and_locale("de", "Direkten Zugriff auf Ihre gesamte Konfigurationsdatenbank erlangen"))
+            .description(
+                MarkupTranslatableString::with_default(
+                    "<p>StretchPlayer will play back an audio file and allow you to time stretch (without affecting pitch) and/or pitch shift (without affecting the time) the audio, even while you are listening to it.</p>\n<p>Warning: this package contains the development version (potentially unstable) released for testing purpose only.</p>"
+                )
+                .and_locale("de", 
+                    "<p>StretchPlayer spielt eine Audiodatei ab und ermöglicht es Ihnen, die Zeit zu dehnen (ohne die Tonhöhe zu beeinflussen) und/oder die Tonhöhe zu verschieben (ohne die Zeit zu beeinflussen), auch während Sie die Datei abhören.</p>\n<p>Warnung: Dieses Paket enthält die (potenziell instabile) Entwicklungsversion, die nur zu Testzwecken freigegeben wurde.</p>"
+                )
+                .and_locale("ja", 
+                    "<p>StretchPlayer はオーディオファイルをプレイバックし、オーディオの (ピッチ に影響を与えない) 時間伸長および (時間に影響を与えない) ピッチシフトが、 聴いている途中でもできます。</p>\n<p>警告: 本パッケージには、テストのためだけにリリースされた (潜在的に不安定 な) 開発バージョンが含まれます。</p>"
+                )
+            )
+            .developer_name(TranslatableString::with_default("MetaBrainz Foundation")
+            .and_locale("de", "MetaBrainz Foundation")
+            .and_locale("zh_CN", "MetaBrainz 基金会"))
+            .project_group("GNOME".into())
+            .project_license("GPL-3.0".into())
+            .category(Category::Unknown("GNOME".into()))
+            .category(Category::Unknown("GTK".into()))
+            .category(Category::System)
+            .keywords(TranslatableList::with_default(vec!["Image","Viewer"])
+            .and_locale("hr", vec!["Slika", "Preglednik"])
+            .and_locale("sv", vec!["Bild", "Visare"]))
+            .compulsory_for_desktop("GNOME".into())
+            .build()
+        )
         .build();
 
         assert_eq!(c1, c2);

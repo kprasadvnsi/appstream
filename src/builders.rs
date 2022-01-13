@@ -84,6 +84,8 @@ pub struct CollectionBuilder {
     pub version: String,
     /// The origin of the collection. Could be something like `flathub`.
     pub origin: Option<String>,
+    /// The origin of the collection. Could be something like `flathub`.
+    pub media_base_url: Option<String>,
     /// The list of components on that collection.
     pub components: Vec<Component>,
     /// The targeted CPU architecture of the collection.
@@ -101,6 +103,7 @@ impl CollectionBuilder {
         Self {
             version: version.to_string(),
             origin: None,
+            media_base_url: None,
             components: vec![],
             architecture: None,
         }
@@ -118,6 +121,12 @@ impl CollectionBuilder {
         self
     }
 
+    /// Sets the origin of the collection.
+    pub fn media_base_url(mut self, origin: &str) -> Self {
+        self.media_base_url = Some(origin.to_string());
+        self
+    }
+
     /// Adds a new component to the collection.
     pub fn component(mut self, component: Component) -> Self {
         self.components.push(component);
@@ -129,6 +138,7 @@ impl CollectionBuilder {
         Collection {
             version: self.version,
             origin: self.origin,
+            media_base_url: self.media_base_url,
             components: self.components,
             architecture: self.architecture,
         }

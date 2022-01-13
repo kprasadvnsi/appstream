@@ -64,6 +64,19 @@ impl MarkupTranslatableString {
         self.add_for_locale(locale, &element_to_xml(&element));
     }
 
+    /// Adds a new string from a `yaml_rust::Yaml`
+    ///
+    /// 
+    /// and can be used to feed the `MarkupTranslatableString`.
+    pub fn add_for_yaml_element(&mut self, element: &yaml_rust::Yaml) {
+        for (k, v) in element.as_hash().unwrap() {
+            self.add_for_locale(
+                k.as_str(),
+                v.as_str().unwrap(), 
+            );
+        }
+    }
+
     /// Adds a new translation for a speicifc locale.
     ///
     /// # Arguments
@@ -141,8 +154,21 @@ impl TranslatableString {
     pub fn add_for_element(&mut self, element: &xmltree::Element) {
         self.add_for_locale(
             element.attributes.get("lang").map(|l| l.as_str()),
-            &element.get_text().unwrap_or_default(), // for some reason some description tags contains empty strings.
+            &element.get_text().unwrap_or_default(), 
         );
+    }
+
+    /// Adds a new string from a `yaml_rust::Yaml`
+    ///
+    /// 
+    /// and can be used to feed the `TranslatableString`.
+    pub fn add_for_yaml_element(&mut self, element: &yaml_rust::Yaml) {
+        for (k, v) in element.as_hash().unwrap() {
+            self.add_for_locale(
+                k.as_str(),
+                v.as_str().unwrap(), // for some reason some description tags contains empty strings.
+            );
+        }
     }
 
     /// Adds a new translation for a speicifc locale.
@@ -230,6 +256,22 @@ impl TranslatableList {
             element.attributes.get("lang").map(|l| l.as_str()),
             &element.get_text().unwrap_or_default(),
         );
+    }
+
+    /// Adds a new string from a `yaml_rust::Yaml`
+    ///
+    /// 
+    /// and can be used to feed the `TranslatableList`.
+    pub fn add_for_yaml_element(&mut self, element: &yaml_rust::Yaml) {
+        for (k, v) in element.as_hash().unwrap() {
+            let keywords = v.as_vec().unwrap();
+            for x in keywords {
+                self.add_for_locale(
+                    k.as_str(),
+                    x.as_str().unwrap(), 
+                );
+            }
+        }
     }
 
     /// Adds a new string for a specific locale.
