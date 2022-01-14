@@ -476,7 +476,7 @@ impl FromStr for ComponentKind {
             "runtime" => Ok(ComponentKind::Runtime),
             "console" | "console-application" => Ok(ComponentKind::ConsoleApplication),
             "desktop" | "desktop-application" => Ok(ComponentKind::DesktopApplication),
-            "webapp" => Ok(ComponentKind::WebApplication),
+            "webapp" | "web-application" => Ok(ComponentKind::WebApplication),
             "inputmethod" => Ok(ComponentKind::InputMethod),
             "operating-system" => Ok(ComponentKind::OS),
             "theme" => Ok(ComponentKind::Theme),

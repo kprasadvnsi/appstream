@@ -300,15 +300,15 @@ impl TryFrom<(&str, &Yaml)> for Component {
                     }
                 }
 
-                "Releases" => {
-                    for child in e.children.iter() {
-                        component = component.release(Release::try_from(
-                            child
-                                .as_element()
-                                .ok_or_else(|| ParseError::invalid_tag("releases"))?,
-                        )?);
-                    }
-                }
+                // "Releases" => {
+                //     for child in e.children.iter() {
+                //         component = component.release(Release::try_from(
+                //             child
+                //                 .as_element()
+                //                 .ok_or_else(|| ParseError::invalid_tag("releases"))?,
+                //         )?);
+                //     }
+                // }
                 "Extends" => {
                     for x in v.as_vec().unwrap() {
                         component = component.extend(AppId::try_from(x)?);
