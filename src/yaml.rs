@@ -300,15 +300,40 @@ impl TryFrom<(&str, &Yaml)> for Component {
                     }
                 }
 
-                // "Releases" => {
-                //     for child in e.children.iter() {
-                //         component = component.release(Release::try_from(
-                //             child
-                //                 .as_element()
-                //                 .ok_or_else(|| ParseError::invalid_tag("releases"))?,
-                //         )?);
-                //     }
-                // }
+                "Releases" => {
+                    for x in v.as_vec().unwrap() {
+                        let version = x["version"]
+                            .as_str()
+                            .ok_or_else(|| ParseError::missing_value("version"))?
+                            .to_owned();
+
+                        let mut release = ReleaseBuilder::new(&version);
+
+                        let date = x["date"].as_i64().map(|d| {
+                            deserialize_date(d.to_string().as_str()).map_err(|_| ParseError::invalid_value(d.to_string().as_str(), "date", "release"))
+                        });
+
+                        if let Some(d) = date {
+                            release = release.date(d?);
+                        }
+
+                        let timestamp = x["unix-timestamp"].as_i64().map(|d| {
+                            deserialize_date(d.to_string().as_str()).map_err(|_| ParseError::invalid_value(d.to_string().as_str(), "date", "release"))
+                        });
+
+                        if let Some(d) = timestamp {
+                            release = release.date(d?);
+                        }
+
+                        if let Some(kind) = x["type"].as_str() {
+                            let kind = ReleaseKind::from_str(kind)
+                                .map_err(|_| ParseError::invalid_value(kind, "type", "release"))?;
+                            release = release.kind(kind);
+                        }
+
+                        component = component.release(release.build())
+                    }
+                }
                 "Extends" => {
                     for x in v.as_vec().unwrap() {
                         component = component.extend(AppId::try_from(x)?);

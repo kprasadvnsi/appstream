@@ -114,8 +114,9 @@ mod tests {
     use crate::builders::{
         CollectionBuilder, ComponentBuilder, ImageBuilder, ReleaseBuilder, ScreenshotBuilder,
     };
-    use crate::enums::{Category, ComponentKind, Icon, ImageKind, ProjectUrl, Provide};
+    use crate::enums::{Category, ComponentKind, Icon, ImageKind, ProjectUrl, Provide, ReleaseKind};
     use crate::{MarkupTranslatableString, TranslatableList, TranslatableString};
+    use chrono::{TimeZone, Utc};
     use std::error::Error;
     use url::Url;
 
@@ -305,6 +306,26 @@ mod tests {
                 width: Some(48),
                 height: Some(48)
             })
+            .release(ReleaseBuilder::new("2.20.0")
+                .kind(ReleaseKind::Stable)
+                .date(Utc.ymd(2019, 6, 20).and_hms_milli(0, 0, 0, 0))
+                .build()
+            )
+            .release(ReleaseBuilder::new("2.19.0")
+                .kind(ReleaseKind::Stable)
+                .date(Utc.ymd(2019, 4, 20).and_hms_milli(0, 0, 0, 0))
+                .build()
+            )
+            .release(ReleaseBuilder::new("2.18.0")
+                .kind(ReleaseKind::Stable)
+                .date(Utc.ymd(2019, 2, 11).and_hms_milli(0, 0, 0, 0))
+                .build()
+            )
+            .release(ReleaseBuilder::new("2.17.0")
+                .kind(ReleaseKind::Stable)
+                .date(Utc.ymd(2018, 12, 16).and_hms_milli(0, 0, 0, 0))
+                .build()
+            )
             .screenshot(
                 ScreenshotBuilder::default()
                 .caption(
@@ -380,7 +401,6 @@ mod tests {
                 )
                 .build()
             )
-
             .build()
         )
         .build();

@@ -111,4 +111,17 @@ Keywords:
   sv:
   - Bild
   - Visare
+Releases:
+- version: 2.20.0
+  type: stable
+  unix-timestamp: 1560988800
+- version: 2.19.0
+  type: stable
+  unix-timestamp: 1555718400
+- version: 2.18.0
+  type: stable
+  unix-timestamp: 1549843200
+- version: 2.17.0
+  type: stable
+  unix-timestamp: 1544918400
 CompulsoryForDesktop: GNOME
