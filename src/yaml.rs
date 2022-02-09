@@ -61,6 +61,10 @@ impl TryFrom<&Vec<Yaml>> for Collection {
             }
         }
 
+        let origin = header["Origin"]
+            .as_str()
+            .ok_or_else(|| ParseError::missing_value("Origin"))?;
+        
         if let Some(media_base_url) = header["MediaBaseUrl"].as_str() {
             if !media_base_url.is_empty() {
                 collection = collection.media_base_url(media_base_url);
@@ -72,19 +76,21 @@ impl TryFrom<&Vec<Yaml>> for Collection {
             .ok_or_else(|| ParseError::missing_value("MediaBaseUrl"))?;
 
         for node in e.iter().skip(1) {
-            collection = collection.component(Component::try_from((media_base_url, node))?);
+            collection = collection.component(Component::try_from((origin, media_base_url, node))?);
         }
         Ok(collection.build())
     }
 }
 
-impl TryFrom<(&str, &Yaml)> for Component {
+impl TryFrom<(&str, &str, &Yaml)> for Component {
     type Error = ParseError;
-    fn try_from(tuple: (&str, &Yaml)) -> Result<Self, Self::Error> {
-        let e: &Yaml = tuple.1.try_into().unwrap();
-        let baseurl: &str = tuple.0.try_into().unwrap();
+    fn try_from(tuple: (&str, &str, &Yaml)) -> Result<Self, Self::Error> {
+        let e: &Yaml = tuple.2.try_into().unwrap();
+        let baseurl: &str = tuple.1.try_into().unwrap();
+        let origin: &str = tuple.0.try_into().unwrap();
         let mut component = ComponentBuilder::default();
 
+        component = component.origin(origin);
         if let Some(kind) = e["Type"].as_str() {
             component = component.kind(
                 ComponentKind::from_str(kind)

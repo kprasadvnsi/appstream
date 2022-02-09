@@ -247,6 +247,7 @@ mod tests {
         .component(
             ComponentBuilder::default()
             .id("gconf-editor.desktop".into())
+            .origin("chromodoris-main")
             .name(
                 TranslatableString::with_default("Configuration Editor")
                 .and_locale("be@latin", "Redaktar naładaŭ")

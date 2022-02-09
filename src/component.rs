@@ -29,6 +29,10 @@ pub struct Component {
     pub name: TranslatableString,
 
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    /// The origin of the collection, could be something like `flathub`.
+    pub origin: Option<String>,
+    
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     /// A short summary of the component.
     pub summary: Option<TranslatableString>,
 

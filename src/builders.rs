@@ -151,6 +151,8 @@ pub struct ComponentBuilder {
     pub kind: ComponentKind,
     /// A unique identifier of the component.
     pub id: Option<AppId>,
+    /// The origin of the collection. Could be something like `flathub`.
+    pub origin: Option<String>,
     /// The component name.
     pub name: Option<TranslatableString>,
     /// A short summary.
@@ -216,6 +218,12 @@ impl ComponentBuilder {
     /// Sets the component's unique identifier.
     pub fn id(mut self, id: AppId) -> Self {
         self.id = Some(id);
+        self
+    }
+
+    /// Sets the origin of the collection.
+    pub fn origin(mut self, origin: &str) -> Self {
+        self.origin = Some(origin.to_string());
         self
     }
 
@@ -412,6 +420,7 @@ impl ComponentBuilder {
         Component {
             kind: self.kind,
             id: self.id.expect("An 'id' is required"),
+            origin: self.origin,
             name: self.name.expect("A 'name' is required"),
             summary: self.summary,
             description: self.description,
