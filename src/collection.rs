@@ -3,6 +3,8 @@ use super::AppId;
 use super::Component;
 #[cfg(feature = "gzip")]
 use flate2::read::GzDecoder;
+#[cfg(feature = "gzip")]
+use std::io::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::convert::TryFrom;
 use std::fs;
@@ -11,6 +13,8 @@ use std::io::BufReader;
 use std::path::PathBuf;
 use xmltree::Element;
 use yaml_rust::YamlLoader;
+
+
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 /// A collection is a wrapper around multiple components at once.
@@ -58,7 +62,6 @@ impl Collection {
     pub fn from_yaml_path(path: PathBuf) -> Result<Self, ParseError> {
         let s = fs::read_to_string(path)?;
         let rrr = YamlLoader::load_from_str(s.as_str()).unwrap();
-        let l = rrr.len();
         let collection = Collection::try_from(&rrr)?;
         Ok(collection)
     }
@@ -75,6 +78,24 @@ impl Collection {
         let d = GzDecoder::new(f);
         let element = Element::parse(d)?;
         let collection: Collection = Collection::try_from(&element)?;
+
+        Ok(collection)
+    }
+
+    #[cfg(feature = "gzip")]
+    /// Create a new `Collection` from a gzipped YAML file.
+    ///
+    /// # Arguments
+    ///
+    /// * `path` - The path to the gzipped collection.
+    pub fn from_yaml_gzipped(path: PathBuf) -> Result<Self, ParseError> {
+        let f = File::open(path)?;
+
+        let mut d = GzDecoder::new(f);
+        let mut s = String::new();
+        d.read_to_string(&mut s)?;
+        let rrr = YamlLoader::load_from_str(s.as_str()).unwrap();
+        let collection: Collection = Collection::try_from(&rrr)?;
 
         Ok(collection)
     }
@@ -131,6 +152,14 @@ mod tests {
             let c2: Collection = serde_json::from_str(&serde_json::to_string(&c1)?)?;
             assert_eq!(c1, c2);
         }
+        Ok(())
+    }
+
+    #[cfg(feature = "gzip")]
+    #[test]
+    fn ubuntu_latest_yaml_collection() -> Result<(), Box<dyn Error>> {
+        let c1 = Collection::from_yaml_gzipped("./tests/collections/main_dep11_Components-amd64.yml.gz".into())?;
+        assert_eq!(c1.components.len(), 94);
         Ok(())
     }
 
